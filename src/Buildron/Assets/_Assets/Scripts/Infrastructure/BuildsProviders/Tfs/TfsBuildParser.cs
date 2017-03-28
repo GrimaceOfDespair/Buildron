@@ -54,12 +54,24 @@ namespace Buildron.Infrastructure.BuildsProvider.Tfs
             };
         }
 
-        public static Build Parse (BuildConfiguration config, TfsBuild tfsBuild)
+        public static Build Parse (BuildConfiguration config, TfsBuild tfsBuild, TfsCommit tfsCommit)
 		{
             IUser user = null;
-            if (tfsBuild.requestedBy != null)
+            //if (tfsBuild.requestedBy != null)
+            //{
+            //    user = Parse(tfsBuild.requestedBy);
+            //}
+
+            if (tfsCommit != null)
             {
-                user = Parse(tfsBuild.requestedBy);
+                if (tfsCommit.committer != null)
+                {
+                    user = Parse(tfsCommit.committer);
+                }
+                else if (tfsCommit.author != null)
+                {
+                    user = Parse(tfsCommit.author);
+                }
             }
 
             return new Build
@@ -67,21 +79,31 @@ namespace Buildron.Infrastructure.BuildsProvider.Tfs
                 Configuration = config,
                 Id = tfsBuild.id.ToString(),
                 Sequence = tfsBuild.id,
-                //LastChangeDescription = tfsBuild.
                 TriggeredBy = user,
                 Status = ParseBuildStatus(tfsBuild),
                 Date = tfsBuild.FinishTime,
-                //PercentageComplete = 
+                PercentageComplete = 1.0f,
+                LastChangeDescription = tfsCommit.comment
             };
 		}
 
-        public static User Parse(TfsUser tfsUser)
+        public static User Parse(TfsGitUser tfsGitUser)
         {
             return new User
             {
-                Name = tfsUser.displayName
+                Name = tfsGitUser.name,
+                Email = tfsGitUser.email,
+                UserName = tfsGitUser.email
             };
         }
+
+        //public static User Parse(TfsUser tfsUser)
+        //{
+        //    return new User
+        //    {
+        //        Name = tfsUser.displayName
+        //    };
+        //}
 
         private static BuildStatus ParseBuildStatus(TfsBuild tfsBuild)
         {

@@ -15,15 +15,19 @@ using System.Linq;
 namespace Buildron.Infrastructure.BuildsProvider.Tfs
 {
     /// <summary>
-    /// TeamCity builds provider.
+    /// Tfs builds provider.
     /// </summary>
     public class TfsBuildsProvider : BuildsProviderBase
     {
+        #region Private fields
+
         private List<BuildConfiguration> buildConfigurations = new List<BuildConfiguration>();
 
         private string userName;
 
         private string password;
+
+        #endregion
 
         #region Constructors
 
@@ -49,26 +53,40 @@ namespace Buildron.Infrastructure.BuildsProvider.Tfs
             {
                 CurrentBuildsFoundCount = tfsDefinitions.count;
 
-                foreach (var tfsDefinitionSummary in tfsDefinitions.value)
-                {
-                    GetModel<TfsDefinition>("build/Definition/" + tfsDefinitionSummary.id, tfsDefinition =>
-                    {
-                        GetBuilds(TfsBuildParser.Parse(tfsDefinition));
-                    });
-                }
+                GetBuildDefinitions(tfsDefinitions);
             });
+        }
+
+        private void GetBuildDefinitions(TfsDefinitions tfsDefinitions)
+        {
+            foreach (var tfsDefinitionSummary in tfsDefinitions.value)
+            {
+                GetModel<TfsDefinition>("build/Definitions/" + tfsDefinitionSummary.id, tfsDefinition =>
+                {
+                    GetBuilds(TfsBuildParser.Parse(tfsDefinition));
+                });
+            }
         }
 
         private void GetBuilds(BuildConfiguration buildConfiguration)
         {
             GetModel<TfsBuilds>(string.Format("build/Builds?Definitions={0}", buildConfiguration.Id), tfsBuilds =>
             {
-                foreach (var tfsBuild in tfsBuilds.value)
+                // Only deal with Git repos
+                foreach (var tfsBuild in tfsBuilds.value.Where(b => b.IsGitRepository()))
                 {
-                    var build = TfsBuildParser.Parse(buildConfiguration, tfsBuild);
-
-                    OnBuildUpdated(new BuildUpdatedEventArgs(build));
+                    GetBuild(buildConfiguration, tfsBuild);
                 }
+            });
+        }
+
+        private void GetBuild(BuildConfiguration buildConfiguration, TfsBuild tfsBuild)
+        {
+            GetModel<TfsCommit>(string.Format("git/repositories/{0}/commits/{1:n}", tfsBuild.repository.id, tfsBuild.sourceVersion), tfsCommit =>
+            {
+                var build = TfsBuildParser.Parse(buildConfiguration, tfsBuild, tfsCommit);
+
+                OnBuildUpdated(new BuildUpdatedEventArgs(build));
             });
         }
 

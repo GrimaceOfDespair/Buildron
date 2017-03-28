@@ -431,11 +431,14 @@
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsBuilds.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsBuildStatus.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsBuildStep.cs" />
+    <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsCommit.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsDefinition.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsDefinitions.cs" />
+    <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsGitUser.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsProjectCollection.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsProject.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsObject.cs" />
+    <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsRepository.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsUser.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\TfsBuildParser.cs" />
     <Compile Include="Assets\_Assets\Scripts\Infrastructure\BuildsProviders\Tfs\Models\TfsList.cs" />

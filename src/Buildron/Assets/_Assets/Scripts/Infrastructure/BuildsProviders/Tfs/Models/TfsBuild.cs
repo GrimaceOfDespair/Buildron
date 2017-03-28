@@ -35,5 +35,11 @@ namespace Buildron.Infrastructure.BuildsProvider.Tfs.Models
         public TfsUser requestedBy;
 
         public TfsUser lastChangedBy;
+
+        public string sourceBranch;
+
+        public string sourceVersion;
+
+        public TfsRepository repository;
     }
 }

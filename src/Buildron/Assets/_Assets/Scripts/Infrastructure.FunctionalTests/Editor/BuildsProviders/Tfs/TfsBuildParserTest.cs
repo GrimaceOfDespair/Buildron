@@ -62,11 +62,11 @@ namespace Buildron.Infrastructure.FunctionalTests.BuildsProviders.Tfs
 		public void Parse_JsonDocument_Build()
         {
             // Arrange
-            TfsBuild tfsBuild = ParseJson<TfsBuild>("TfsBuildParser.Build");
+            var tfsBuild = ParseJson<TfsBuild>("TfsBuildParser.Build");
             var buildConfiguration = new Domain.Builds.BuildConfiguration();
 
             // Act
-            var build = TfsBuildParser.Parse(buildConfiguration, tfsBuild);
+            var build = TfsBuildParser.Parse(buildConfiguration, tfsBuild, null);
 
             // Assert
             Assert.That(build.Id, Is.EqualTo("6"));

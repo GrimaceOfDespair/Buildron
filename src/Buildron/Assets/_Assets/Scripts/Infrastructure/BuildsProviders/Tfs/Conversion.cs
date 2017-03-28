@@ -16,5 +16,12 @@ namespace Buildron.Infrastructure.BuildsProvider.Tfs.Models
         {
             return DateTime.Parse(value);
         }
+
+        public static bool IsGitRepository(this TfsBuild tfsBuild)
+        {
+            return
+                tfsBuild.repository != null &&
+                "TfsGit".Equals(tfsBuild.repository.type, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 }
