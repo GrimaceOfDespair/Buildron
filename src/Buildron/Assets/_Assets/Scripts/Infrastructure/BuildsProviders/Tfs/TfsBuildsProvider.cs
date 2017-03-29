@@ -35,7 +35,7 @@ namespace Buildron.Infrastructure.BuildsProvider.Tfs
         {
             Name = "Tfs";
             AuthenticationRequirement = AuthenticationRequirement.Always;
-            AuthenticationTip = "type a TFS ADMIN username and password.\n*BASIC HTTP authentication will be used.";
+            AuthenticationTip = "type a TFS ADMIN username and password.\n*BASIC HTTP authentication will be used.\nUsing API tokens? Leave user name empty and add token to password field.";
         }
 
         #endregion
@@ -73,7 +73,7 @@ namespace Buildron.Infrastructure.BuildsProvider.Tfs
             GetModel<TfsBuilds>(string.Format("build/Builds?Definitions={0}", buildConfiguration.Id), tfsBuilds =>
             {
                 // Only deal with Git repos
-                foreach (var tfsBuild in tfsBuilds.value.Where(b => b.IsGitRepository()))
+                foreach (var tfsBuild in tfsBuilds.value.Where(b => b.ContainsGitCommits()))
                 {
                     GetBuild(buildConfiguration, tfsBuild);
                 }
